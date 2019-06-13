@@ -1,4 +1,4 @@
-package com.github.xiaoxixi.user.domain;
+package com.github.xiaoxixi.auth.domain;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -7,17 +7,15 @@ import java.util.Date;
 
 @Getter
 @Setter
-public class User {
+public class UserAccessToken {
 
     private Long id;
 
-    private String userCode;
+    private Long userId;
 
-    private String userName;
+    private String accessToken;
 
-    private String refreshToken;
-
-    private String loginPwd;
+    private Long expireIn;
 
     private Long createBy;
 
