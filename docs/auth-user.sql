@@ -37,7 +37,7 @@ CREATE TABLE `user_access_token` (
   `id` bigint(20) NOT NULL,
   `user_id` bigint(20) NOT NULL,
   `access_token` varchar(64) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `expire_time` datetime DEFAULT NULL,
+  `expire_in` bigint(20) DEFAULT NULL,
   `create_by` bigint(20) DEFAULT NULL,
   `gmt_create` datetime DEFAULT NULL,
   `modify_by` bigint(20) DEFAULT NULL,
