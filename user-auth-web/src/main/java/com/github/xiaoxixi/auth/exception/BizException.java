@@ -2,11 +2,13 @@ package com.github.xiaoxixi.auth.exception;
 
 
 import com.github.xiaoxixi.auth.enums.ErrorCodeEnum;
+import lombok.Getter;
 
 public class BizException extends Exception {
 
     private String errorCode;
 
+    @Getter
     private String message;
 
     public BizException(String message) {

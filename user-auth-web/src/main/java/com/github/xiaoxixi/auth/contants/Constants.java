@@ -6,6 +6,9 @@ public class Constants {
 
     public final static String ACCESS_TOKEN_SALT = "*@%$a^#43*)Hl&(F#ML@#Moo)$`0#^&(*^kelsf45jka3";
 
-    public final static long ACCESS_TOKEN_EXPIRE_TIME = 24 * 60 * 60;
+    public final static int ACCESS_TOKEN_EXPIRE_TIME = 24 * 60 * 60;
+
+    public final static String TOKEN_COOKIE_NAME = "auth_token___";
+
 
 }

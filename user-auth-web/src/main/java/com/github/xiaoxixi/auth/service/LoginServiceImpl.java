@@ -11,10 +11,10 @@ import com.github.xiaoxixi.auth.exception.BizException;
 import com.github.xiaoxixi.auth.exception.ParamsException;
 import com.github.xiaoxixi.auth.utils.Md5Utils;
 import com.github.xiaoxixi.auth.vo.TokenParam;
-import com.github.xiaoxixi.auth.vo.UserAccessTokenVO;
 import com.github.xiaoxixi.auth.vo.UserSessionVO;
 import com.xiaoxixi.service.register.redis.RedisService;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.time.DateUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -62,12 +62,13 @@ public class LoginServiceImpl implements LoginService {
         }
         UserAccessToken token = userAccessTokenMapper.selectByUserId(user.getId());
         Date now = new Date();
+        Date expireAt = DateUtils.addSeconds(now, Constants.ACCESS_TOKEN_EXPIRE_TIME);
         if (Objects.isNull(token)) {
             String accessToken = generateAccessToken(user);
             token = new UserAccessToken();
             token.setUserId(user.getId());
             token.setAccessToken(accessToken);
-            token.setExpireIn(Constants.ACCESS_TOKEN_EXPIRE_TIME);
+            token.setExpireAt(expireAt);
             token.setCreateBy(user.getId());
             token.setModifyBy(user.getId());
             token.setGmtCreate(now);
@@ -83,7 +84,7 @@ public class LoginServiceImpl implements LoginService {
             token.setGmtModify(now);
             token.setModifyBy(user.getId());
             token.setAccessToken(accessToken);
-            token.setExpireIn(Constants.ACCESS_TOKEN_EXPIRE_TIME);
+            token.setExpireAt(expireAt);
             userAccessTokenMapper.updateByUserIdSelective(token);
             return accessToken;
         }
@@ -107,17 +108,15 @@ public class LoginServiceImpl implements LoginService {
     }
 
     @Override
-    public UserAccessTokenVO verifyAccessToken(String accessToken)throws BizException {
-        return null;
-    }
-
-    @Override
-    public boolean checkLoginPwd(String userCode, String password)throws BizException{
-        return false;
-    }
-
-    @Override
-    public UserSessionVO refreshToken(Long userId, String refreshToken)throws BizException{
-        return null;
+    public UserSessionVO refreshAccessToken(Long userId, String refreshToken)throws BizException{
+        User user = userMapper.selectById(userId);
+        if (Objects.isNull(user)
+                || !Objects.equals(refreshToken, user.getRefreshToken())) {
+            throw new BizException(ErrorCodeEnum.ILLEGAL_USER);
+        }
+        UserSessionVO session = UserConvertUtils.covertToUserSessionVO(user);
+        String accessToken = refreshAccessToken(user, true);
+        session.setAccessToken(accessToken);
+        return session;
     }
 }

@@ -15,7 +15,7 @@ public class UserAccessToken {
 
     private String accessToken;
 
-    private Long expireIn;
+    private Date expireAt;
 
     private Long createBy;
 

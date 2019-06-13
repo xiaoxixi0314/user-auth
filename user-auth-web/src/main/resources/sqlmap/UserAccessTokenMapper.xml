@@ -5,7 +5,7 @@
     <id column="id" jdbcType="BIGINT" property="id" />
     <result column="user_id" jdbcType="BIGINT" property="userId" />
     <result column="access_token" jdbcType="VARCHAR" property="accessToken" />
-    <result column="expire_in" jdbcType="BIGINT" property="expireIn" />
+    <result column="expire_at" jdbcType="BIGINT" property="expireAt" />
     <result column="create_by" jdbcType="BIGINT" property="createBy" />
     <result column="gmt_create" jdbcType="TIMESTAMP" property="gmtCreate" />
     <result column="modify_by" jdbcType="BIGINT" property="modifyBy" />
@@ -13,7 +13,7 @@
   </resultMap>
 
   <sql id="Base_Column_List">
-    id, user_id, access_token, expire_in, create_by, gmt_create, modify_by, gmt_modify
+    id, user_id, access_token, expire_at, create_by, gmt_create, modify_by, gmt_modify
   </sql>
 
   <select id="selectById" parameterType="java.lang.Long" resultMap="BaseResultMap">
@@ -36,12 +36,24 @@
   </delete>
 
   <insert id="insert" parameterType="com.github.xiaoxixi.auth.domain.UserAccessToken">
-    insert into user_access_token (id, user_id, access_token,
-      expire_in, create_by, gmt_create,
-      modify_by, gmt_modify)
-    values (#{id}, #{userId}, #{accessToken},
-      #{expireIn}, #{createBy}, #{gmtCreate},
-      #{modifyBy}, #{gmtModify})
+    insert into user_access_token (
+      id,
+      user_id,
+      access_token,
+      expire_at,
+      create_by,
+      gmt_create,
+      modify_by,
+      gmt_modify)
+    values (
+      #{id},
+      #{userId},
+      #{accessToken},
+      #{expireAt},
+      #{createBy},
+      #{gmtCreate},
+      #{modifyBy},
+      #{gmtModify})
   </insert>
 
   <insert id="insertSelective" parameterType="com.github.xiaoxixi.auth.domain.UserAccessToken">
@@ -56,8 +68,8 @@
       <if test="accessToken != null">
         access_token,
       </if>
-      <if test="expireIn != null">
-        expire_in,
+      <if test="expireAt != null">
+        expire_at,
       </if>
       <if test="createBy != null">
         create_by,
@@ -82,8 +94,8 @@
       <if test="accessToken != null">
         #{accessToken},
       </if>
-      <if test="expireIn != null">
-        #{expireIn},
+      <if test="expireAt != null">
+        #{expireAt},
       </if>
       <if test="createBy != null">
         #{createBy},
@@ -109,8 +121,8 @@
       <if test="accessToken != null">
         access_token = #{accessToken},
       </if>
-      <if test="expireIn != null">
-        expire_in = #{expireIn},
+      <if test="expireAt != null">
+        expire_at = #{expireAt},
       </if>
       <if test="createBy != null">
         create_by = #{createBy},
@@ -134,8 +146,8 @@
       <if test="accessToken != null">
         access_token = #{accessToken},
       </if>
-      <if test="expireIn != null">
-        expire_in = #{expireIn},
+      <if test="expireAt != null">
+        expire_in = #{expireAt},
       </if>
       <if test="createBy != null">
         create_by = #{createBy},
