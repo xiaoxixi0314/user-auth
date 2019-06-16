@@ -40,7 +40,7 @@ public class AuthController{
         }catch (BizException be) {
             return Result.error(be.getMessage());
         } catch (Exception ex) {
-            LOGGER.error("login sysrem error:", ex);
+            LOGGER.error("login system error:", ex);
             return Result.error(ErrorCodeEnum.SYSTEM_ERROR);
         }
     }
@@ -49,12 +49,31 @@ public class AuthController{
     public Result<UserSessionVO> refreshToken(@RequestParam Long userId,
                                               @RequestParam String refreshToken) {
         try {
-            UserSessionVO seesion = loginService.refreshAccessToken(userId, refreshToken);
-            return Result.success(seesion);
+            UserSessionVO session = loginService.refreshAccessToken(userId, refreshToken);
+            return Result.success(session);
         } catch (BizException be) {
             return Result.error(be.getMessage());
         } catch (Exception ex) {
             LOGGER.error("refresh token error, user id:{}, refresh token:{}", userId, refreshToken, ex);
+            return Result.error(ErrorCodeEnum.SYSTEM_ERROR);
+        }
+    }
+
+    @PostMapping("/logout")
+    public Result<Boolean> logout(Long userId, HttpServletResponse response){
+        try {
+            // clear cookie
+            Cookie cookie = new Cookie(Constants.TOKEN_COOKIE_NAME, "");
+            cookie.setMaxAge(0);
+            cookie.setHttpOnly(true);
+            cookie.setPath("/");
+            response.addCookie(cookie);
+            // clear token in redis
+
+
+            return Result.success(Boolean.TRUE);
+        } catch (Exception e) {
+            LOGGER.error("logout system error:", e);
             return Result.error(ErrorCodeEnum.SYSTEM_ERROR);
         }
     }

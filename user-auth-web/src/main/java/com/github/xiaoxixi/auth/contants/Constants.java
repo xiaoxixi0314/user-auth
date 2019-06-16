@@ -10,5 +10,7 @@ public class Constants {
 
     public final static String TOKEN_COOKIE_NAME = "auth_token___";
 
+    public final static String REDIS_TOKEN_PREFIX = "ACCESS_TOKEN";
 
+    public final static String REDIS_KEY_SPLIT = ":";
 }

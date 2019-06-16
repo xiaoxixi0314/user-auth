@@ -1,5 +1,6 @@
 package com.github.xiaoxixi.auth.service;
 
+import com.alibaba.fastjson.JSON;
 import com.github.xiaoxixi.auth.contants.Constants;
 import com.github.xiaoxixi.auth.convert.UserConvertUtils;
 import com.github.xiaoxixi.auth.dao.UserAccessTokenMapper;
@@ -9,6 +10,7 @@ import com.github.xiaoxixi.auth.domain.UserAccessToken;
 import com.github.xiaoxixi.auth.enums.ErrorCodeEnum;
 import com.github.xiaoxixi.auth.exception.BizException;
 import com.github.xiaoxixi.auth.exception.ParamsException;
+import com.github.xiaoxixi.auth.utils.LoginUtils;
 import com.github.xiaoxixi.auth.utils.Md5Utils;
 import com.github.xiaoxixi.auth.vo.TokenParam;
 import com.github.xiaoxixi.auth.vo.UserSessionVO;
@@ -74,7 +76,6 @@ public class LoginServiceImpl implements LoginService {
             token.setGmtCreate(now);
             token.setGmtModify(now);
             userAccessTokenMapper.insertSelective(token);
-            return accessToken;
         }
 
         if (forceRefresh) {
@@ -86,11 +87,11 @@ public class LoginServiceImpl implements LoginService {
             token.setAccessToken(accessToken);
             token.setExpireAt(expireAt);
             userAccessTokenMapper.updateByUserIdSelective(token);
-            return accessToken;
         }
-
+        // save token info into redis
+        String tokenRedisKey = LoginUtils.buildRedisTokenKey(token);
+        redisService.set(tokenRedisKey, JSON.toJSONString(token));
         return token.getAccessToken();
-
     }
 
     private String generateAccessToken(User user) throws BizException{

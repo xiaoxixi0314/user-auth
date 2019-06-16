@@ -13,9 +13,11 @@ public class Md5Utils {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(Md5Utils.class);
 
+    private Md5Utils(){}
+
     public static String encrypt(String source) throws BizException {
         if (StringUtils.isEmpty(source)) {
-            throw new ParamsException("加密字符不能为空");
+            throw new ParamsException("encrypt source can't be empty");
         }
         String md5Str = null;
         try {
@@ -33,7 +35,7 @@ public class Md5Utils {
             md5Str = stringBuffer.toString();
         } catch (Exception ex) {
             LOGGER.error("encrypt source string to md5 error:", ex);
-            throw new BizException("加密失败");
+            throw new BizException("encrypt system error");
         }
         return md5Str;
     }
