@@ -18,21 +18,21 @@
     gmt_modify
   </sql>
 
-  <select id="selectById" parameterType="java.lang.Long" resultMap="BaseResultMap">
+  <select id="selectById" resultMap="BaseResultMap">
     select
     <include refid="Base_Column_List" />
     from user
     where id = #{id}
   </select>
 
-  <select id="selectByUserCode" parameterType="java.lang.Long" resultMap="BaseResultMap">
+  <select id="selectByUserCode" resultMap="BaseResultMap">
     select
     <include refid="Base_Column_List" />
     from user
     where user_code = #{userCode}
   </select>
 
-  <delete id="deleteById" parameterType="java.lang.Long">
+  <delete id="deleteById">
     delete from user
     where id = #{id}
   </delete>
