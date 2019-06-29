@@ -40,10 +40,7 @@ public class AuthController{
                                        HttpServletResponse response){
         try {
             UserSessionVO session = loginService.login(userCode, password);
-            Cookie cookie = new Cookie(Constants.TOKEN_COOKIE_NAME, session.getAccessToken());
-            cookie.setMaxAge(Constants.ACCESS_TOKEN_EXPIRE_TIME);
-            cookie.setHttpOnly(true);
-            cookie.setPath("/");
+            Cookie cookie = LoginUtils.buildAccessTokenCookie(session.getAccessToken());
             response.addCookie(cookie);
             return Result.success(session);
         }catch (BizException be) {
@@ -56,9 +53,12 @@ public class AuthController{
 
     @PostMapping("/refresh/token")
     public Result<UserSessionVO> refreshToken(@RequestParam Long userId,
-                                              @RequestParam String refreshToken) {
+                                              @RequestParam String refreshToken,
+                                              HttpServletResponse response) {
         try {
             UserSessionVO session = loginService.refreshAccessToken(userId, refreshToken);
+            Cookie cookie = LoginUtils.buildAccessTokenCookie(session.getAccessToken());
+            response.addCookie(cookie);
             return Result.success(session);
         } catch (BizException be) {
             return Result.error(be.getMessage());

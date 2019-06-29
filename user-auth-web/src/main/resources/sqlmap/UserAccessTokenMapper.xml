@@ -147,7 +147,7 @@
         access_token = #{accessToken},
       </if>
       <if test="expireAt != null">
-        expire_in = #{expireAt},
+        expire_at = #{expireAt},
       </if>
       <if test="createBy != null">
         create_by = #{createBy},
@@ -169,7 +169,7 @@
     update user_access_token
     set user_id = #{userId},
       access_token = #{accessToken},
-      expire_in = #{expireIn},
+      expire_at = #{expireAt},
       create_by = #{createBy},
       gmt_create = #{gmtCreate},
       modify_by = #{modifyBy},
